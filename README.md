@@ -4,6 +4,7 @@ A gaze-contingent simulation of homonymous hemianopia (loss of one half of the v
 Intended as a demo prototype.
 
 *Features*
+
 Gaze-contingent veil: the blind field tracks the user's eye gaze (not just head direction), using the HoloLens 2 eye tracker.
 Left or right: simulate left or right homonymous hemianopia with a single toggle.
 Optional macular sparing: a small clear disc around the point of fixation, adjustable in degrees, reflecting the preserved central vision many patients retain.
@@ -13,11 +14,14 @@ Neutral veil: the blind field is filled with a plain neutral colour, which can b
 
 
 *Files*
+
 HemiVeil.shader: the veil shader.
+
 HemiVeilDriver_MRTK.cs: gaze driver using MRTK's eye-gaze provider.
 
 
 *Requirements*
+
 Unity 2022.3 LTS
 A HoloLens 2 with eye tracking and UWP build support
 OpenXR with eye gaze enabled, and the GazeInput capability ticked

@@ -5,7 +5,7 @@ using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 
 // MRTK 2.8 version of HemiVeilDriver
-// requires: MRTK Foundation (2.8) in the project, eye tracking enabled in the MRTK Input System
+// requires MRTK Foundation (2.8) in the project, eye tracking enabled in the MRTK Input System
 // profile, and the GazeInput capability ticked in Player publishing settings.
 
 
@@ -63,9 +63,7 @@ public class HemiVeilDriverMRTK : MonoBehaviour
         if (cam == null) cam = Camera.main;
         if (cam == null || veilMaterial == null) return;
 
-        // --- read gaze from MRTK (falls back to head-forward if unavailable) ---
-        // If your MRTK point release doesn't expose IsEyeTrackingEnabledAndValid, swap it for
-        // (gaze.IsEyeTrackingEnabled && gaze.IsEyeCalibrationValid == true).
+        // read gaze from MRTK
         var gaze = CoreServices.InputSystem?.EyeGazeProvider;
 
         bool valid = gaze != null && gaze.IsEyeTrackingEnabledAndValid;
@@ -80,17 +78,17 @@ public class HemiVeilDriverMRTK : MonoBehaviour
             calibrationWarned = true;
         }
 
-        // --- project gaze to viewport (0..1) ---
+        //project gaze to viewport (0..1)
         Vector3 vp = cam.WorldToViewportPoint(gazeOrigin + gazeDir);
         float gx = Mathf.Clamp01(vp.x);
         float gy = Mathf.Clamp01(vp.y);
         if (flipGazeY) gy = 1f - gy;
 
-        // --- camera FOV in degrees (vertical from camera, horizontal derived via aspect) ---
+        //camera FOV in degrees
         float vFov = cam.fieldOfView;
         float hFov = 2f * Mathf.Atan(Mathf.Tan(vFov * Mathf.Deg2Rad * 0.5f) * cam.aspect) * Mathf.Rad2Deg;
 
-        // --- push to the material (single source of truth) ---
+        //push to the material
         veilMaterial.SetVector(idGazeUV, new Vector4(gx, gy, 0f, 0f));
         veilMaterial.SetFloat (idFovX,  hFov);
         veilMaterial.SetFloat (idFovY,  vFov);
@@ -100,7 +98,7 @@ public class HemiVeilDriverMRTK : MonoBehaviour
         veilMaterial.SetFloat (idAlpha, maxOpacity);
         veilMaterial.SetColor (idColor, veilColor);
 
-        // --- buffered gaze log ---
+        //buffered gaze log
         if (logGaze)
         {
             buf.Append(Time.time.ToString("F4")).Append(',')
